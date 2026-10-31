@@ -130,7 +130,8 @@ curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/
 This adaptation adds native OpenAI plugin packaging and skill display metadata
 while preserving the original guidelines and existing host support. See
 **[CODEX.md](CODEX.md)** for local plugin installation, direct skill installation,
-and optional persistent guidance through `AGENTS.md`.
+and an explicit setup workflow for persistent guidance through `AGENTS.md`.
+The setup previews its changes and requires authorization before writing.
 
 ## Using with Cursor
 
