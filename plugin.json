@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "monolithic-agent-guidelines",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Karpathy-inspired coding guidelines: surface assumptions, keep solutions simple, limit changes, and verify outcomes.",
   "author": {
     "name": "forrestchang"

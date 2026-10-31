@@ -1,0 +1,6 @@
+interface:
+  display_name: "Set Up Persistent Guidelines"
+  short_description: "Preview and install Codex startup guidance"
+  default_prompt: "Use $monolithic-agent-guidelines:setup to configure persistent Codex guidance after I review the proposed change."
+policy:
+  allow_implicit_invocation: false
