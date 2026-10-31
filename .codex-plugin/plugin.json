@@ -1,0 +1,20 @@
+{
+  "name": "monolithic-agent-guidelines",
+  "version": "1.1.0",
+  "description": "Karpathy-inspired coding guidelines: surface assumptions, keep solutions simple, limit changes, and verify outcomes.",
+  "author": {
+    "name": "forrestchang"
+  },
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Monolithic Agent Guidelines",
+    "shortDescription": "Simple, focused coding with verifiable outcomes",
+    "longDescription": "The original Karpathy-inspired coding guidelines, shared across Claude Code, Cursor, Codex, and ChatGPT.",
+    "developerName": "forrestchang (original author); Codex adaptation",
+    "category": "Productivity",
+    "defaultPrompt": [
+      "Apply Monolithic Agent Guidelines to the coding task I describe."
+    ]
+  }
+}

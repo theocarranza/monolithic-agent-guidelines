@@ -125,6 +125,13 @@ echo "" >> CLAUDE.md
 curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
 ```
 
+## Using with Codex and ChatGPT
+
+This adaptation adds native OpenAI plugin packaging and skill display metadata
+while preserving the original guidelines and existing host support. See
+**[CODEX.md](CODEX.md)** for local plugin installation, direct skill installation,
+and optional persistent guidance through `AGENTS.md`.
+
 ## Using with Cursor
 
 This repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project in Cursor. See **[CURSOR.md](CURSOR.md)** for setup, using the rule in other projects, and how this relates to Claude Code.
