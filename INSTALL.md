@@ -10,13 +10,13 @@ project. ChatGPT web installation is a separate manual flow described in CODEX.m
 All detected supported local hosts:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.0/install.sh | bash -s -- --host all
+curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.1/install.sh | bash -s -- --host all
 ```
 
 Choose one or more hosts:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.0/install.sh | bash -s -- --host codex,cursor
+curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.1/install.sh | bash -s -- --host codex,cursor
 ```
 
 Download and inspect install.sh first if you prefer to review it before running.
@@ -75,7 +75,7 @@ only if you use it. Existing project and approval rules continue to apply.
 ## Check the result
 
 Codex: run codex plugin list --marketplace monolithic-agent-guidelines --json.
-The installed version should be 1.4.0. In /hooks, only SessionStart,
+The installed version should be 1.4.1. In /hooks, only SessionStart,
 UserPromptSubmit, PreToolUse and PostCompact belong to this plugin. Review/trust
 those definitions; there is no completion verifier or state-write permission step.
 

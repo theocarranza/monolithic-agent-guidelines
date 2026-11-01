@@ -43,6 +43,23 @@ class EnforcementTests(unittest.TestCase):
         self.assertIn('dart/guidelines', ids)
         self.assertIn('typescript/guidelines', ids)
 
+    def test_canonical_behavior_reference_routes_across_languages_and_boundaries(self):
+        from retrieval.catalog import Catalog
+        catalog = Catalog(ROOT / 'knowledge')
+        for prompt in ['Design database and JSON data sources', 'Replace local storage',
+                       'Review adapters', 'Unify entry points', 'Inject test dependencies',
+                       'Review a Dart workflow', 'Review a TypeScript workflow']:
+            with self.subTest(prompt=prompt):
+                event = {**self.event, 'tool_input': {}, 'prompt': prompt}
+                ids = [doc['id'] for doc in self.policy.requirements(event, catalog)]
+                self.assertIn('shared/canonical-behavior', ids)
+        for prompt in ['Run pwd', 'Review typography and color', 'Explain resourceful metadata']:
+            with self.subTest(prompt=prompt):
+                event = {**self.event, 'tool_input': {}, 'prompt': prompt}
+                ids = [doc['id'] for doc in self.policy.requirements(event, catalog)]
+                self.assertNotIn('shared/canonical-behavior', ids)
+                self.assertIn('shared/fp', ids)
+
     def test_fingerprint_detects_content_not_only_version(self):
         self.assertNotEqual(self.policy.fingerprint([{'id': 'a', 'sha256': '1', 'version': '1'}]), self.policy.fingerprint([{'id': 'a', 'sha256': '2', 'version': '1'}]))
 

@@ -2,7 +2,7 @@
 
 This adaptation adds OpenAI packaging around the original principles in
 `skills/karpathy-guidelines/SKILL.md`, extended with reference routing. Claude Code and Cursor files remain
-available. Both host packages are version 1.4.0; Claude retains its original plugin identity. These additions are not an upstream release.
+available. Both host packages are version 1.4.1; Claude retains its original plugin identity. These additions are not an upstream release.
 
 ## Install the local plugin
 
@@ -35,7 +35,7 @@ This project has not been published to the public ChatGPT plugin directory.
 Local installation does not publish it. Register this fork's implementation branch with:
 
 ```bash
-codex plugin marketplace add theocarranza/monolithic-agent-guidelines --ref v1.4.0
+codex plugin marketplace add theocarranza/monolithic-agent-guidelines --ref v1.4.1
 ```
 
 Do not use the upstream URL expecting these additions to be present.
@@ -186,7 +186,7 @@ PostCompact. Hooks supply missing references before a guarded action and refresh
 them after a new task, resume or compaction. Retry after reading the supplied
 guidance. Normal tool permissions still apply.
 
-There is no Stop/PostToolUse hook or completion verifier in version 1.4.0.
+There is no Stop/PostToolUse hook or completion verifier in version 1.4.1.
 A successful shell inspection does not demand verification receipts, a project
 configuration file, plugin-state write access or escalation. Test actual work
 according to the project's existing workflow and the fourth principle.

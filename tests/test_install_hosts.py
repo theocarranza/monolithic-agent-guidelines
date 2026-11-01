@@ -24,9 +24,9 @@ class InstallerTests(unittest.TestCase):
         if args[:4] == ['codex', 'plugin', 'marketplace', 'list']:
             data = {'marketplaces': []}
         elif args[:3] == ['codex', 'plugin', 'list']:
-            data = {'installed': [{'pluginId': self.module.CODEX_ID, 'version': '1.4.0', 'enabled': True}]}
+            data = {'installed': [{'pluginId': self.module.CODEX_ID, 'version': '1.4.1', 'enabled': True}]}
         elif args[:3] == ['claude', 'plugin', 'list']:
-            data = [{'id': self.module.CLAUDE_ID, 'version': '1.4.0', 'enabled': True}]
+            data = [{'id': self.module.CLAUDE_ID, 'version': '1.4.1', 'enabled': True}]
         elif args[:4] == ['claude', 'plugin', 'marketplace', 'list']:
             data = []
         else:
@@ -95,7 +95,7 @@ class InstallerTests(unittest.TestCase):
 
 
     def test_marketplace_refresh_preserves_foreign_registration(self):
-        package = self.home / 'releases/1.4.0'
+        package = self.home / 'releases/1.4.1'
         for location, allowed in [(self.module.REPOSITORY + '.git', True),
                                   ('https://github.com/someone/another-repo', False)]:
             self.calls.clear()
@@ -157,7 +157,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual((other / 'old.txt').read_text(), 'keep')
 
     def test_existing_marketplace_same_release_needs_no_refresh(self):
-        package = self.home / 'releases/1.4.0'
+        package = self.home / 'releases/1.4.1'
         def client(args):
             self.calls.append(args)
             return subprocess.CompletedProcess(args, 0, stdout=json.dumps({'marketplaces': [

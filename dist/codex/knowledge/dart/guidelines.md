@@ -8,6 +8,12 @@ Use expressions, folds and pattern matching; do not introduce if/else, loops or
 mutable state in new Dart code. Preserve project approval and deletion gates.
 
 ## Routing
+Read shared/canonical-behavior for interchangeable sources, equivalent entry
+points and production/test dependencies. Keep one shared use case behind typed
+contracts and injected capabilities, using the project's existing dartz types.
+Do not weaken strict expression-based Dart style or introduce a new abstraction
+solely to share similar-looking code.
+
 Read dart/task for asynchronous effects, dart/option for optional values and
 dart/either for expected failure. Confirm the project's pinned dartz version and
 source signatures. Do not assume fpdart TaskEither APIs exist in dartz. Adapt at
