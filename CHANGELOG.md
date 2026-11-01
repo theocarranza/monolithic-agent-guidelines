@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1
+
+- Fix hook discovery on Codex 0.166.0 by routing its marketplace to a generated legacy-format package without a portable root manifest.
+- Keep the portable root package intact; generate Codex runtime files from the same source and check committed output for drift.
+- Add package regression tests and an optional real Codex hooks/list test using a disposable home without model access.
+- Native discovery verifies six enabled hooks awaiting trust. Live tool interception still requires user review/trust and a smoke test.
+
 ## 1.3.0
 
 - Add versioned core, shared, Dart and TypeScript references with catalog/find/fetch retrieval.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Karpathy Guidelines"
+  short_description: "Simple, focused coding with verifiable outcomes"
+  default_prompt: "Use $monolithic-agent-guidelines:karpathy-guidelines to implement the requested change with minimal scope and verifiable success criteria."

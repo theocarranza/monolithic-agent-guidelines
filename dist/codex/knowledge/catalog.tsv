@@ -1,0 +1,16 @@
+id	language	topic	title	path	provenance	read_when	required
+core/principles	all	principles	Four principles	core/principles.md	original	Before substantial planning coding or review	true
+core/retrieval	all	retrieval	Retrieval policy	core/retrieval-policy.md	authored	At startup resume compaction or scope changes	true
+shared/fp	all	functional	Functional programming	shared/functional-programming.md	adapted	When designing pure decisions and effect boundaries	true
+shared/verification	all	verification	Verification evidence	shared/verification.md	authored	Before implementation and completion	true
+dart/guidelines	dart	language	Strict functional Dart	dart/guidelines.md	authored	When planning editing or reviewing Dart	true
+dart/task	dart	task	Dartz Task async effects	dart/dartz-task.md	adapted	When Task async sequencing or concurrency is involved	false
+dart/option	dart	option	Dartz Option absence	dart/dartz-option.md	adapted	When optional presence or nullable boundaries are involved	false
+dart/either	dart	either	Dartz Either failure	dart/dartz-either.md	authored	When expected failure or typed error handling is involved	false
+typescript/guidelines	typescript	language	Functional TypeScript	typescript/guidelines.md	adapted	When planning editing or reviewing TypeScript	true
+typescript/effects	typescript	effects	Capability-based effects	typescript/capability-based-effects.md	adapted	When external effects or deterministic fakes are involved	false
+typescript/monoids	typescript	monoids	Lawful aggregation	typescript/monoids.md	adapted	When aggregation or monoid combination is involved	false
+examples/dart	dart	examples	Dart example	examples/dart.md	authored	When a small Dart composition example helps	false
+examples/typescript	typescript	examples	TypeScript example	examples/typescript.md	adapted	When a portable result union example helps	false
+research/functional-patterns	all	research	Functional pattern rationale	research/functional-patterns.md	adapted	When deeper background or provenance is needed	false
+research/dartz-task-source	dart	research	Task source evidence	research/dartz-task-source.md	derived	When checking Task API claims against supplied source	false

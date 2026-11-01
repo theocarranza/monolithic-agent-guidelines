@@ -182,3 +182,14 @@ The goal is reducing costly mistakes on non-trivial work, not slowing down simpl
 ## License
 
 MIT
+
+
+### Codex 0.166.0 compatibility (1.3.1)
+
+The Codex marketplace installs the generated `dist/codex` package so this client
+can discover lifecycle hooks. The portable root package is preserved. After
+upgrading, restart Codex and use `/hooks` to review and trust all six hooks before
+testing tool interception. See [Codex setup](CODEX.md) and [hook checks](HOOKS.md).
+From the repository checkout, generated packages must match source: run `python3 scripts/build_codex_package.py
+--check` before publishing. Source changes are rebuilt with the same command
+without `--check`.

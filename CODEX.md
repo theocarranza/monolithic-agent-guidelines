@@ -2,7 +2,7 @@
 
 This adaptation adds OpenAI packaging around the original principles in
 `skills/karpathy-guidelines/SKILL.md`, extended with reference routing. Claude Code and Cursor files remain
-available. Both host packages are version 1.3.0; Claude retains its original plugin identity. These additions are not an upstream release.
+available. Both host packages are version 1.3.1; Claude retains its original plugin identity. These additions are not an upstream release.
 
 ## Install the local plugin
 
@@ -25,16 +25,17 @@ the skill. In the ChatGPT desktop Plugins Directory, select **Monolithic Agent G
 and install **Monolithic Agent Guidelines**. Local marketplace availability
 depends on the client. Refresh or reopen the directory if needed.
 
-The marketplace's `source.path` is relative to the repository root, so `./`
-selects this repository's root plugin. The portable root manifest discovers
-`skills/`; `.codex-plugin/plugin.json` supplies OpenAI compatibility metadata.
-The existing `.claude-plugin/` files continue serving Claude Code.
+The marketplace's `source.path` selects `./dist/codex`, generated from the
+repository's runtime files. This package intentionally has no root `plugin.json`:
+Codex 0.166.0 skips plugin hook loading for portable Agent Plugins. The legacy
+`.codex-plugin/plugin.json` declares `./hooks/codex.json` in this distribution.
+The portable package at the repository root remains available for other clients.
 
 This project has not been published to the public ChatGPT plugin directory.
 Local installation does not publish it. Register this fork's implementation branch with:
 
 ```bash
-codex plugin marketplace add theocarranza/monolithic-agent-guidelines --ref v1.3.0
+codex plugin marketplace add theocarranza/monolithic-agent-guidelines --ref v1.3.1
 ```
 
 Do not use the upstream URL expecting these additions to be present.
@@ -174,9 +175,9 @@ Original author metadata and MIT declarations are preserved. This adaptation
 does not claim authorship by Andrej Karpathy or endorsement by upstream.
 
 
-## Version 1.3.0 candidate and hook support
+## Version 1.3.1 candidate and hook support
 
-This checkout is the unreleased 1.3.0 candidate. Until a v1.3.0 tag is published,
+This checkout is the unreleased 1.3.1 candidate. Until a v1.3.1 tag is published,
 register `--ref feat/on-demand-guidance` once that branch is pushed, or use a local
 checkout. The versioned installation example above applies after release.
 
@@ -192,3 +193,25 @@ Standalone skill copies keep the four embedded principles but do not include
 the reference engine or hooks. Copy/install the complete plugin to use those
 features. Cloud-orchestrated ChatGPT sessions do not run these local command
 hooks. Ordinary ChatGPT conversations remain outside their scope.
+
+
+## Codex 0.166.0 hook discovery regression
+
+Version 1.3.0 installed skills but did not expose hooks in this client. Version
+1.3.1 routes the Codex marketplace to a generated legacy-format package. Do not
+manually edit dist/codex: edit the authoritative source, then run:
+
+```bash
+python3 scripts/build_codex_package.py
+python3 scripts/build_codex_package.py --check
+python3 -m unittest discover -s tests -q
+python3 tests/native_codex_discovery.py /absolute/path/to/codex
+```
+
+Run these development commands from the repository checkout, not the installed
+plugin cache. The optional native test installs into a disposable CODEX_HOME and queries the
+real app-server hooks/list registry. It requires no model, account or credentials.
+It must discover six enabled, untrusted hooks with no errors. It does not trust
+hooks or certify live tool interception. After upgrading to v1.3.1, restart Codex,
+open /hooks, review/trust this package's hooks, then repeat the pwd smoke test.
+Rerun setup to refresh any absolute paths in your existing global guidance.
