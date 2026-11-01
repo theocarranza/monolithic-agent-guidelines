@@ -49,20 +49,14 @@ installation alone does not modify instruction files or prove hooks are active.
    This returns enforcement: unverified. Presence on disk does not establish host
    support, trust, startup loading or model compliance. Follow HOOKS.md for a real
    isolated host smoke test; distinguish protocol tests from live host evidence.
-8. Explain explicit verification: the hook supplies an enforcement/verify.py
-   command after guarded work. It executes configured project argument arrays
-   only when explicitly invoked and records actual exit codes. Explain that the
-   default git diff --check proves whitespace cleanliness only. Preview and obtain
-   authorization before creating a project verification configuration.
-9. The completion hook supplies an explicit --state-dir. Preserve it: hook-only
-   PLUGIN_DATA variables may be absent from shell tools. The verifier must use
-   that exact existing state directory, not an inferred fallback. If the sandbox
-   denies writing the lock/receipt, show the exact directory and request write
-   access only there. For local Codex, the user can restart with
-   `codex --add-dir /exact/directory/from/the/hook`. Do not apply that grant,
-   change sandbox settings, or edit global configuration automatically. User
-   approval applies to the shown directory only. A desktop session needs its
-   own equivalent scoped access; do not claim a separate CLI launch changes it.
+8. Explain the guidance-only lifecycle: startup/prompt/compaction events reset
+   reference receipts; the first guarded action supplies missing guidance, then a
+   retry can proceed subject to normal permissions. There is no Stop or
+   PostToolUse hook, completion receipt, automatic test command or verifier.
+   Hook execution owns its retrieval state. The agent's query command is read-only;
+   do not request sandbox write access or escalation for plugin bookkeeping.
+   Project verification remains governed by the task, project and development
+   harness instructions. No .monolithic-guidelines.json file is required.
 
 Do not delete instructions, backups or session records. Do not claim local command
 hooks cover cloud-orchestrated ChatGPT sessions or ordinary ChatGPT conversations.

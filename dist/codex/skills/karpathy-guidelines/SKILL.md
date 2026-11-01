@@ -86,8 +86,9 @@ monoid references when relevant. Shared advice never weakens stricter language o
 project rules. Research and examples support decisions; they do not prescribe
 source-project helpers or dependencies in other repositories.
 
-Bundled hooks can supply missing guidance before tools proceed and request actual
-verification evidence at completion. Host support, trust and observed execution
+Bundled hooks supply missing guidance before tools proceed. They do not register
+a completion gate or require a verifier. Choose task verification from the project
+workflow and report its real results. Host support, trust and observed execution
 are required. Installation alone does not prove enforcement. If installed as a
 standalone skill without the plugin's reference store and scripts, apply the four
 principles above and report that references/hooks are unavailable. Never invent

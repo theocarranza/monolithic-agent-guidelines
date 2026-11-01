@@ -11,12 +11,11 @@ A passing whitespace check does not prove tests pass. A check that ran before a
 later edit is stale. Report failed, skipped, unavailable or inconclusive checks
 plainly. Never claim completion solely because a hook permitted a tool call.
 
-## Hook completion gate
-For guarded changes, run the bundled enforcement/verify.py command supplied by
-the hook. Project .monolithic-guidelines.json may define verification_commands as
-a nonempty list of argument arrays. The runner executes only on explicit request,
-without a shell, and records actual outcomes for the current change generation.
-The git-project fallback is git diff --check, which checks whitespace only.
-Configure meaningful project checks; do not weaken an existing check to get a
-passing receipt. A repeated Stop hook permits a blocked-status response to avoid
-an endless continuation loop; it does not turn missing evidence into success.
+## Project verification
+Choose checks from the task's acceptance criteria and the project's existing
+workflow. Report their actual commands, outcomes and limits. Follow explicit
+project or development-harness verification requirements where provided.
+
+The guidance plugin loads references; it does not register a completion hook,
+run a verifier, demand a receipt, or require shell tools to write plugin state.
+A read-only inspection command does not create a new testing requirement.

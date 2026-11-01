@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 
 DIRECTORIES = ('.codex-plugin', 'skills', 'knowledge', 'retrieval', 'enforcement', 'hooks', '.cursor')
-FILES = ('README.md', 'README.zh.md', 'CLAUDE.md', 'CURSOR.md', 'EXAMPLES.md', 'CODEX.md', 'HOOKS.md', 'CHANGELOG.md')
+FILES = ('README.md', 'README.zh.md', 'CLAUDE.md', 'CURSOR.md', 'EXAMPLES.md', 'CODEX.md', 'HOOKS.md', 'CHANGELOG.md', 'INSTALL.md')
 
 
 def build(root, check=False):

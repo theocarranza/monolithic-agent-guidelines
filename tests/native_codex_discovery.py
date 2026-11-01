@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import queue
 import signal
+import sys
 import subprocess
 import tempfile
 import threading
@@ -22,10 +23,14 @@ def check(binary):
             '[features]\nremote_plugin = false\napps = false\n'
             '[projects.' + json.dumps(str(project)) + ']\ntrust_level = "trusted"\n')
         env = {**os.environ, 'CODEX_HOME': str(home)}
-        for arguments in [['plugin', 'marketplace', 'add', str(ROOT), '--json'],
-                          ['plugin', 'add', PLUGIN, '--json']]:
-            subprocess.run([binary, *arguments], env=env, cwd=project, capture_output=True, text=True,
-                           timeout=20, check=True)
+        sys.path.insert(0, str(ROOT / 'scripts'))
+        from install_hosts import install
+        def client(arguments):
+            return subprocess.run([binary, *arguments[1:]], env=env, cwd=project,
+                                  capture_output=True, text=True, timeout=20, check=True)
+        installed = install(ROOT, fixture / 'user', ['codex'],
+                            which=lambda name: binary if name == 'codex' else None, runner=client)
+        assert installed['installed'] == ['codex'], installed
         with (fixture / 'stderr.log').open('w') as log:
             process = subprocess.Popen([binary, 'app-server', '--stdio'], env=env, cwd=project,
                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE,
@@ -52,7 +57,7 @@ def check(binary):
                 process.stdin.flush()
                 result = rpc(2, 'hooks/list', {'cwds': [str(project)]})['data'][0]
                 hooks = [hook for hook in result['hooks'] if hook.get('pluginId') == PLUGIN]
-                expected = {'sessionStart', 'userPromptSubmit', 'preToolUse', 'postToolUse', 'stop', 'postCompact'}
+                expected = {'sessionStart', 'userPromptSubmit', 'preToolUse', 'postCompact'}
                 assert {hook['eventName'] for hook in hooks} == expected, hooks
                 assert all(hook['enabled'] and hook['trustStatus'] == 'untrusted' for hook in hooks), hooks
                 assert not result['errors'], result['errors']
@@ -60,7 +65,7 @@ def check(binary):
                     assert Path(hook['sourcePath']).is_file(), hook
                 return {'client': initialized['userAgent'], 'hooks': sorted(expected),
                         'trust': 'untrusted (expected)', 'errors': result['errors'],
-                        'live_execution': 'not tested'}
+                        'mode': 'guidance-only', 'live_execution': 'not tested'}
             finally:
                 os.killpg(process.pid, signal.SIGKILL)
                 process.wait(timeout=5)
