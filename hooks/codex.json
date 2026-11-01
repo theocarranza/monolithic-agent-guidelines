@@ -35,28 +35,6 @@
         ]
       }
     ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"${PLUGIN_ROOT}/enforcement/adapters/codex.py\"",
-            "timeout": 15
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"${PLUGIN_ROOT}/enforcement/adapters/codex.py\"",
-            "timeout": 15
-          }
-        ]
-      }
-    ],
     "PostCompact": [
       {
         "hooks": [

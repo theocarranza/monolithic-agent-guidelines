@@ -1,195 +1,190 @@
-# Karpathy-Inspired Claude Code Guidelines
+# Monolithic Agent Guidelines
 
-> Check out my new project [Multica](https://github.com/multica-ai/multica) — an open-source platform for running and managing coding agents with reusable skills.
->
-> Follow me on X: [https://x.com/jiayuan_jy](https://x.com/jiayuan_jy)
+[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](https://github.com/theocarranza/monolithic-agent-guidelines/releases/tag/v1.4.0)
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
+[![Codex](https://img.shields.io/badge/Codex-guidance_hooks-black.svg)](CODEX.md)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-guidance_hooks-blueviolet.svg)](INSTALL.md)
+[![Cursor](https://img.shields.io/badge/Cursor-skills_and_references-black.svg)](CURSOR.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#license-and-attribution)
 
-A single `CLAUDE.md` file to improve Claude Code behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls.
+Karpathy-inspired coding principles with on-demand functional-programming
+references for Dart and TypeScript. Install them across supported local agent
+hosts, load relevant guidance when work requires it, and keep project verification
+in the project's own workflow.
 
-English | [简体中文](./README.zh.md)
+> Skills describe how to work. Guidance hooks supply the relevant instructions
+> before supported tools proceed. They do not run a second delivery workflow.
 
-## The Problems
+## Why this exists
 
-From Andrej's post:
+Agents can hide assumptions, add unnecessary abstractions, change unrelated code,
+and declare work finished without useful evidence. Four compact principles address
+those habits. Detailed references remain in installed, versioned files so agents
+can fetch the language and topic they need instead of carrying every document in
+context. Reloading after task changes or compaction reduces dependence on memory.
 
-> "The models make wrong assumptions on your behalf and just run along with them without checking. They don't manage their confusion, don't seek clarifications, don't surface inconsistencies, don't present tradeoffs, don't push back when they should."
+| Principle | Expected behavior |
+| --- | --- |
+| Think Before Coding | Expose assumptions, ambiguity and tradeoffs |
+| Simplicity First | Build only what the task needs |
+| Surgical Changes | Keep every edit tied to the request |
+| Goal-Driven Execution | Define observable success and verify actual work |
 
-> "They really like to overcomplicate code and APIs, bloat abstractions, don't clean up dead code... implement a bloated construction over 1000 lines when 100 would do."
+## Documentation
 
-> "They still sometimes change/remove comments and code they don't sufficiently understand as side effects, even if orthogonal to the task."
+| Area | Guide |
+| --- | --- |
+| Installation and host selection | [INSTALL.md](INSTALL.md) |
+| Codex and persistent startup guidance | [CODEX.md](CODEX.md) |
+| Hook lifecycle, retrieval and limits | [HOOKS.md](HOOKS.md) |
+| Cursor support | [CURSOR.md](CURSOR.md) |
+| Reference routing | [Knowledge manifest](knowledge/manifest.md), [catalog](knowledge/catalog.tsv) |
+| Full principles | [Core skill](skills/karpathy-guidelines/SKILL.md) |
+| Examples | [EXAMPLES.md](EXAMPLES.md) |
+| Release history | [CHANGELOG.md](CHANGELOG.md) |
 
-## The Solution
+## Architecture at a glance
 
-Four principles in one file that directly address these issues:
-
-| Principle | Addresses |
-|-----------|-----------|
-| **Think Before Coding** | Wrong assumptions, hidden confusion, missing tradeoffs |
-| **Simplicity First** | Overcomplication, bloated abstractions |
-| **Surgical Changes** | Orthogonal edits, touching code you shouldn't |
-| **Goal-Driven Execution** | Leverage through tests-first, verifiable success criteria |
-
-## The Four Principles in Detail
-
-### 1. Think Before Coding
-
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
-
-LLMs often pick an interpretation silently and run with it. This principle forces explicit reasoning:
-
-- **State assumptions explicitly** — If uncertain, ask rather than guess
-- **Present multiple interpretations** — Don't pick silently when ambiguity exists
-- **Push back when warranted** — If a simpler approach exists, say so
-- **Stop when confused** — Name what's unclear and ask for clarification
-
-### 2. Simplicity First
-
-**Minimum code that solves the problem. Nothing speculative.**
-
-Combat the tendency toward overengineering:
-
-- No features beyond what was asked
-- No abstractions for single-use code
-- No "flexibility" or "configurability" that wasn't requested
-- No error handling for impossible scenarios
-- If 200 lines could be 50, rewrite it
-
-**The test:** Would a senior engineer say this is overcomplicated? If yes, simplify.
-
-### 3. Surgical Changes
-
-**Touch only what you must. Clean up only your own mess.**
-
-When editing existing code:
-
-- Don't "improve" adjacent code, comments, or formatting
-- Don't refactor things that aren't broken
-- Match existing style, even if you'd do it differently
-- If you notice unrelated dead code, mention it — don't delete it
-
-When your changes create orphans:
-
-- Remove imports/variables/functions that YOUR changes made unused
-- Don't remove pre-existing dead code unless asked
-
-**The test:** Every changed line should trace directly to the user's request.
-
-### 4. Goal-Driven Execution
-
-**Define success criteria. Loop until verified.**
-
-Transform imperative tasks into verifiable goals:
-
-| Instead of... | Transform to... |
-|--------------|-----------------|
-| "Add validation" | "Write tests for invalid inputs, then make them pass" |
-| "Fix the bug" | "Write a test that reproduces it, then make it pass" |
-| "Refactor X" | "Ensure tests pass before and after" |
-
-For multi-step tasks, state a brief plan:
-
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
+```mermaid
+flowchart TD
+    A["Host lifecycle and tool events"] --> B["Guidance adapter"]
+    B --> C["Select language and topic references"]
+    C --> D["Installed knowledge and retrieval receipts"]
+    C --> E{"Guidance already supplied?"}
+    E -->|No| F["Deny with guidance; read and retry"]
+    F --> B
+    E -->|Yes| G["Normal tool permissions"]
 ```
 
-Strong success criteria let the LLM loop independently. Weak criteria ("make it work") require constant clarification.
+Only the host hook writes retrieval bookkeeping. The query command reads local
+files. There is no Stop/PostToolUse hook, mandatory verifier, completion receipt,
+or sandbox write-grant step in the default flow. The fourth principle still calls
+for appropriate tests and honest reporting; project instructions and development
+harnesses define any mandatory delivery checks.
 
-## Install
+## Features and host support
 
-**Option A: Claude Code Plugin (recommended)**
+- Versioned core, shared, Dart and TypeScript guidance with source metadata.
+- Read-only catalog, search and document/section retrieval.
+- Guidance delivery before guarded tools, with refresh after resume or compaction.
+- Strict Dart references and portable TypeScript guidance; project rules prevail.
+- One installer for all detected supported local hosts or a selected subset.
+- Separate, preview-first Codex setup for persistent startup guidance.
 
-From within Claude Code, first add the marketplace:
-```
-/plugin marketplace add forrestchang/andrej-karpathy-skills
-```
+| Host | Skills and references | Automatic guidance hooks |
+| --- | --- | --- |
+| Codex | Yes | Four retrieval lifecycle events; host trust required |
+| Claude Code | Yes | Three retrieval lifecycle events; host controls apply |
+| Cursor | Portable local package | Not provided by this package |
+| ChatGPT | Manual configuration; see CODEX.md | Not established by local shell installation |
 
-Then install the plugin:
-```
-/plugin install andrej-karpathy-skills@karpathy-skills
-```
+## Requirements
 
-This installs the guidelines as a Claude Code plugin, making the skill available across all your projects.
+| Requirement | Notes |
+| --- | --- |
+| Python | 3.9+ for runtime and installer |
+| Bash and Git | One-command bootstrap from a pinned release tag |
+| Codex / Claude CLI | Required when explicitly selecting that native plugin installation |
+| Cursor | Supports local portable plugins; organizational import policies may apply |
+| Operating system | Linux for the shipped hook state implementation |
 
-**Option B: CLAUDE.md (per-project)**
+## Installation
 
-New project:
+All detected supported local hosts:
+
 ```bash
-curl -o CLAUDE.md https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md
+curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.0/install.sh | bash -s -- --host all
 ```
 
-Existing project (append):
+Only selected hosts:
+
 ```bash
-echo "" >> CLAUDE.md
-curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
+curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.0/install.sh | bash -s -- --host codex,cursor
 ```
 
-## Using with Codex and ChatGPT
+From a repository checkout, inspect the planned targets first:
 
-This adaptation adds native OpenAI plugin packaging and skill display metadata
-while preserving the original guidelines and existing host support. See
-**[CODEX.md](CODEX.md)** for local plugin installation, direct skill installation,
-and an explicit setup workflow for persistent guidance through `AGENTS.md`.
-The setup previews its changes and requires authorization before writing.
-
-Version 1.3.0 adds a local reference catalog, on-demand retrieval and host hooks
-for Codex and Claude Code. See [the retrieval and hook guide](HOOKS.md) for
-trust, verification configuration, smoke tests and enforcement limits. A plugin
-installation makes hooks available; it does not prove they are active.
-
-## Using with Cursor
-
-This repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project in Cursor. See **[CURSOR.md](CURSOR.md)** for setup, using the rule in other projects, and how this relates to Claude Code.
-
-## Key Insight
-
-From Andrej:
-
-> "LLMs are exceptionally good at looping until they meet specific goals... Don't tell it what to do, give it success criteria and watch it go."
-
-The "Goal-Driven Execution" principle captures this: transform imperative instructions into declarative goals with verification loops.
-
-## How to Know It's Working
-
-These guidelines are working if you see:
-
-- **Fewer unnecessary changes in diffs** — Only requested changes appear
-- **Fewer rewrites due to overcomplication** — Code is simple the first time
-- **Clarifying questions come before implementation** — Not after mistakes
-- **Clean, minimal PRs** — No drive-by refactoring or "improvements"
-
-## Customization
-
-These guidelines are designed to be merged with project-specific instructions. Add them to your existing `CLAUDE.md` or create a new one.
-
-For project-specific rules, add sections like:
-
-```markdown
-## Project-Specific Guidelines
-
-- Use TypeScript strict mode
-- All API endpoints must have tests
-- Follow the existing error handling patterns in `src/utils/errors.ts`
+```bash
+bash install.sh --host all --dry-run
 ```
 
-## Tradeoff Note
+Installation is user-scoped and reports unavailable hosts. It does not install
+client applications, sign in, trust hooks, change security settings or edit
+persistent instructions. ChatGPT web configuration remains manual. See
+[installation details and preservation rules](INSTALL.md).
 
-These guidelines bias toward **caution over speed**. For trivial tasks (simple typo fixes, obvious one-liners), use judgment — not every change needs the full rigor.
+## Quick start
 
-The goal is reducing costly mistakes on non-trivial work, not slowing down simple tasks.
+Restart the selected host. In Codex, open /hooks and review/trust this package's
+four retrieval hooks. Start a fresh session and ask:
 
-## License
+```text
+Run pwd. If the guidance hook blocks it, read the supplied guidance
+and retry once within this turn. Do not modify project files.
+```
 
-MIT
+The initial denial should contain the relevant references. The retry should run
+subject to normal permissions, and the turn should finish without a verifier or
+extra state-write permission request from this plugin. Other installed plugins
+can have their own checks.
 
+For deliberate Codex skill invocation:
 
-### Codex 0.166.0 compatibility (1.3.1)
+```text
+Use $monolithic-agent-guidelines:karpathy-guidelines for this task.
+```
 
-The Codex marketplace installs the generated `dist/codex` package so this client
-can discover lifecycle hooks. The portable root package is preserved. After
-upgrading, restart Codex and use `/hooks` to review and trust all six hooks before
-testing tool interception. See [Codex setup](CODEX.md) and [hook checks](HOOKS.md).
-From the repository checkout, generated packages must match source: run `python3 scripts/build_codex_package.py
---check` before publishing. Source changes are rebuilt with the same command
-without `--check`.
+For persistent startup guidance, separately invoke
+$monolithic-agent-guidelines:setup. It previews an AGENTS.md change for approval.
+Installing the plugin alone does not change that file.
+
+## Repository layout
+
+| Path | Purpose |
+| --- | --- |
+| skills/ | Core principles and explicit Codex setup |
+| knowledge/ | Versioned references and routing catalog |
+| retrieval/ | Read-only catalog, search and fetch command |
+| enforcement/adapters/ | Host payloads, reference delivery and reloads |
+| hooks/ | Registered guidance-only hook definitions |
+| scripts/ | Host installation and generated-package checks |
+| dist/codex/ | Generated legacy package for Codex 0.166.0 compatibility |
+| tests/ | Retrieval, adapter, installation and regression checks |
+
+## Development and testing
+
+Run from the repository checkout:
+
+```bash
+python3 scripts/build_codex_package.py
+python3 scripts/build_codex_package.py --check
+python3 -m unittest discover -s tests -q
+python3 tests/native_codex_discovery.py /absolute/path/to/codex
+```
+
+Edit authoritative source files, then regenerate dist/codex. Do not edit installed
+copies or generated files directly. The native test installs into a disposable
+home and reads the real Codex hook registry without a model. Adapter tests check
+initial denial, retry, scope reloads and normal completion. Installer tests use
+isolated homes and controlled client processes. Native registry checks and unit
+tests do not prove model compliance, all host versions, or enterprise policy.
+
+## Status and limitations
+
+The default flow is guidance retrieval only. Shell tools need no write access to
+plugin bookkeeping. Disabled/untrusted hooks, unsupported tool paths and host
+errors can bypass retrieval; hooks are not a complete security boundary or proof
+of understanding. Verification of actual code remains a project responsibility.
+Legacy verifier files are retained but unregistered and are not part of the
+current hook workflow. No existing user files or instruction blocks are deleted
+by this change.
+
+## License and attribution
+
+MIT declarations and original author attribution are preserved. This project
+adapts [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills),
+with original author metadata naming forrestchang, and principles inspired by
+[Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876).
+The adaptation adds host packaging, setup and reference retrieval; it does not
+claim endorsement by Karpathy or the upstream authors. Historical Chinese
+upstream documentation remains in [README.zh.md](README.zh.md).

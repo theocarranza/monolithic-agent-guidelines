@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.0
+
+- Refactor README around the Monolithic Dev Harness documentation standard: badges, purpose, documentation map, architecture, installation, quick start, testing and support limits.
+- Add a user-scoped installer for all detected supported local hosts or selected Codex/Claude/Cursor targets, with dry-run, preservation checks and explicit activation steps.
+
+- Limit the default hook flow to reference retrieval, routing and lifecycle reloads.
+- Remove registered Stop/PostToolUse hooks and their mandatory completion-verification logic. Shell inspection no longer requires a verifier, receipt or additional sandbox write access.
+- Keep retrieval bookkeeping entirely in host hook execution; catalog/find/fetch remains read-only. The fourth principle still requires appropriate project verification.
+- Preserve files and existing user configuration; legacy verifier files remain unregistered and are not part of the guidance workflow.
+- Update setup, reference instructions and native discovery checks for four Codex retrieval hooks (three on Claude Code).
+
 ## 1.3.2
 
 - Pass the exact hook state directory to the verifier so shell environment differences do not select an empty unrelated record.

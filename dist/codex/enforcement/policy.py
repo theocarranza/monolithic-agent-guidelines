@@ -38,7 +38,7 @@ def fingerprint(documents):
 
 
 def internal_command(tool_input, root):
-    """Only direct bundled read/verify commands; never shell expressions."""
+    """Only direct bundled read commands; never shell expressions."""
     command = tool_input.get('command', tool_input.get('cmd', '')) if isinstance(tool_input, dict) else ''
     if not isinstance(command, str) or re.search(r'[$`;&|><\n\r]', command):
         return False
@@ -51,9 +51,7 @@ def internal_command(tool_input, root):
     script = Path(words[1])
     if not script.is_absolute():
         return False
-    if script == root / 'retrieval/query.py':
-        return words[2] in ('catalog', 'find', 'fetch')
-    return script == root / 'enforcement/verify.py' and words[2] == '--key'
+    return script == root / 'retrieval/query.py' and words[2] in ('catalog', 'find', 'fetch')
 
 
 def guarded(event, root):
