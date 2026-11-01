@@ -26,7 +26,10 @@ the original embedded principles but lacks this engine and hooks.
 
 ## Host registration and trust
 
-Codex: .codex-plugin/plugin.json selects hooks/codex.json. Claude Code: the standard
+Codex: the marketplace selects generated dist/codex, whose legacy
+.codex-plugin/plugin.json selects hooks/codex.json. Codex 0.166.0 skips hooks
+for the portable root package; do not point this marketplace back to ./.
+Regenerate with python3 scripts/build_codex_package.py after source changes. Claude Code: the standard
 hooks/hooks.json calls the Claude adapter. Both retain their existing plugin
 identities. Install/enable the plugin through the host and review its current hook
 definition through the host's review interface where required. Codex skips
@@ -145,3 +148,10 @@ Contracts checked against official documentation on 2026-10-31:
 - https://learn.chatgpt.com/docs/hooks
 - https://developers.openai.com/plugins/build/plugins
 - https://code.claude.com/docs/en/hooks
+
+
+Native discovery was reproduced with Codex 0.166.0: portable v1.3.0 yielded zero
+plugin hooks; the legacy distribution in v1.3.1 yields all six, enabled and
+untrusted, without registry errors. Run tests/native_codex_discovery.py with the
+absolute Codex binary path to repeat this check. Trust and live execution remain
+separate user-machine checks; discovery does not prove the hook callbacks ran.
