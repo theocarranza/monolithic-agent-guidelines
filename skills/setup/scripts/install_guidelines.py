@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import stat
+import shlex
 import sys
 import tempfile
 import uuid
@@ -42,14 +43,29 @@ def managed_block():
     positions = [source.index(heading) for heading in headings]
     if positions != sorted(positions):
         raise ValueError("Original skill has unexpected principle order")
-    principles = source[positions[0]:].strip().encode("utf-8")
-    return (
-        START + b"\n# Monolithic Agent Guidelines\n\n"
-        b"These principles supplement existing instructions. Existing project requirements, "
-        b"permissions, and explicit approval requirements for edits and deletions take "
-        b"precedence if a principle conflicts with them. This section grants no additional "
-        b"authorization. Use judgment for trivial tasks.\n\n" + principles + b"\n" + END
+    root = Path(__file__).resolve().parents[3]
+    query = "python3 " + shlex.quote(str(root / "retrieval/query.py"))
+    source_hash = hashlib.sha256(source.encode()).hexdigest()
+    text = (
+        "# Monolithic Agent Guidelines\n\n"
+        "Existing project requirements, permissions and explicit approval requirements "
+        "for edits and deletions take precedence. This section grants no authorization.\n\n"
+        "- Think Before Coding: expose assumptions and resolve ambiguity.\n"
+        "- Simplicity First: build only what the task needs.\n"
+        "- Surgical Changes: keep every edit tied to the request.\n"
+        "- Goal-Driven Execution: define success and verify the result.\n\n"
+        "Before substantial planning, implementation or review, fetch the full principles "
+        "and consult the catalog for relevant language and topic guidance. Reload after "
+        "resume, context compaction, a new task or a scope change. Follow language-specific "
+        "rules over permissive shared examples.\n\n"
+        + query + " fetch core/principles\n" + query + " catalog\n\n"
+        "Installed skill sha256: " + source_hash + "\n"
+        "Bundled hooks require host support and trust. Their presence does not prove "
+        "active enforcement. If the plugin moves or is upgraded, rerun setup to refresh "
+        "these paths. Report unavailable guidance rather than inventing it.\n"
     )
+    return START + b"\n" + text.encode("utf-8") + END
+
 
 
 def merge(existing, block):
@@ -81,7 +97,7 @@ class Plan:
             fromfile=str(self.target), tofile=str(self.target), lineterm="",
         )
         return {
-            "target": str(self.target), "digest": self.digest,
+            "target": str(self.target), "digest": self.digest, "hook_status": "unverified",
             "changed": self.before != self.after, "backup": str(backup) if backup else None,
             "backup_required": self.existed and self.before != self.after,
             "diff": "\n".join(lines),

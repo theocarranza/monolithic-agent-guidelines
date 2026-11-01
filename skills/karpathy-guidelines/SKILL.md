@@ -65,3 +65,30 @@ For multi-step tasks, state a brief plan:
 ```
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+<!-- reference-routing -->
+
+## Installed references and reloads
+
+Keep the four principles above authoritative. Before substantial planning,
+implementation or review, consult the installed [catalog](../../knowledge/catalog.tsv)
+and fetch the full applicable language/topic references. Use
+`python3 <plugin-root>/retrieval/query.py catalog --language dart` (or `typescript`),
+then `find TOPIC --language LANGUAGE`, then `fetch ID` or `fetch ID#heading`.
+Read [retrieval policy](../../knowledge/core/retrieval-policy.md) for reload rules.
+Reload after resume, compaction, a new task or a change of language/module/library.
+Use returned source/version/hash metadata rather than recalling an earlier copy.
+
+Dart tasks use [strict Dart guidance](../../knowledge/dart/guidelines.md) and fetch
+Task, Option and Either references as relevant. TypeScript tasks use
+[TypeScript guidance](../../knowledge/typescript/guidelines.md), with effects and
+monoid references when relevant. Shared advice never weakens stricter language or
+project rules. Research and examples support decisions; they do not prescribe
+source-project helpers or dependencies in other repositories.
+
+Bundled hooks can supply missing guidance before tools proceed and request actual
+verification evidence at completion. Host support, trust and observed execution
+are required. Installation alone does not prove enforcement. If installed as a
+standalone skill without the plugin's reference store and scripts, apply the four
+principles above and report that references/hooks are unavailable. Never invent
+missing guidance or bypass project permissions and approval gates.

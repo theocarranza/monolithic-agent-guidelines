@@ -1,53 +1,60 @@
 ---
 name: setup
-description: Set up persistent Monolithic Agent Guidelines in Codex AGENTS.md on the user's intended machine. Use only when explicitly asked to configure global or project guidance; preview the change and obtain authorization before applying it.
+description: Set up persistent Monolithic Agent Guidelines and explain bundled hook activation on the user's intended Codex machine. Use only when explicitly asked to configure global or project guidance; preview changes and obtain authorization before applying them.
 ---
 
-# Set up persistent Codex guidance
+# Set up persistent guidance and inspect hook readiness
 
-This workflow installs the original four principles as Codex startup instructions.
-Installing the plugin alone does not change any instruction file.
+Configure compact principle summaries and installed retrieval paths. Plugin
+installation alone does not modify instruction files or prove hooks are active.
 
-1. Establish that the executor is the user's intended Codex machine. A cloud
-   executor's home is separate from the user's computer. If this is the wrong
-   machine or local execution is unavailable, provide the manual steps in
-   `CODEX.md` at the plugin root; do not claim the user's machine is configured.
+1. Establish that this executor is the user's intended Codex machine. A cloud
+   executor has a separate home. If local execution is unavailable, give the
+   manual steps in CODEX.md at the plugin root. Do not claim their computer is
+   configured.
 2. Offer global scope (recommended) or a specific project directory. Global
-   scope defaults to `$CODEX_HOME/AGENTS.md`, or `~/.codex/AGENTS.md` when unset.
-   An active nonempty `AGENTS.override.md` takes precedence; show the effective
-   target selected by the installer. Do not silently install into an ignored file.
-3. Locate this installed skill's directory from its registered path. Run its
-   bundled installer with Python 3.9 or newer. Do not guess a cache path:
+   scope defaults to $CODEX_HOME, otherwise ~/.codex. A nonempty active
+   AGENTS.override.md takes precedence over AGENTS.md. Show the effective target.
+3. Locate this skill's registered installed path. Run its bundled Python 3.9+
+   installer; do not guess a versioned cache path:
 
    ```bash
    python3 /absolute/path/to/skills/setup/scripts/install_guidelines.py
    ```
 
-   For project scope, add `--scope project --project /absolute/project/path`.
-   The default operation is a read-only preview. It derives the four principles
-   from the original sibling skill, preserving one authoritative source.
-4. Present the reported target, proposed diff, and backup requirement. Explain
-   that global guidance applies to subsequent Codex sessions across projects;
-   project instructions can refine or override it. Respect all existing edit
-   and deletion approval gates. The user's authorization to install the plugin
-   is not authorization to modify their instruction files.
-5. Only after the proposed instruction change is explicitly authorized, repeat
-   the same scope arguments with `--apply --expected-digest DIGEST`, using the
-   digest from the approved preview. Do not fabricate a digest, bypass a mismatch,
-   or automatically apply a newly generated preview. A mismatch requires a new
-   review. Already-present guidance is a no-op.
-6. Report the written path and backup path. The installer preserves all content
-   outside its marked section and backs up existing bytes before replacement.
-   It does not reconcile conflicting prose automatically. If conflicts exist,
-   resolve them with the user before applying. Existing project requirements,
-   permissions, and explicit authorization gates take precedence.
-   Ask the user to avoid concurrent edits during apply: the final checks are
-   best effort against unrelated writers, not a shared editor lock.
-7. Ask the user to start a fresh Codex session in the intended project and
-   summarize the four principles from its initial instructions without invoking
-   a skill, browsing, or modifying files. Distinguish a successful file write
-   from verified startup loading and from observed model behavior.
+   For project scope add --scope project --project /absolute/project/path.
+   Default operation is read-only preview. Present target, diff, backup requirement
+   and hook_status. It preserves bytes outside the managed block.
+4. Respect existing edit/deletion approval gates. Authorization to install a plugin
+   does not authorize changing instruction files. Only after the displayed change
+   is authorized, repeat identical scope arguments with --apply --expected-digest
+   DIGEST from that preview. Refuse mismatches; do not silently approve a new diff.
+   Already-current guidance is a no-op. Avoid concurrent edits during apply; the
+   final recheck is best effort against unrelated editors, not a shared lock.
+5. Report written and backup paths. Explain that startup summaries route the agent
+   to installed full principles and relevant language references. Rerun setup after
+   a plugin relocation or upgrade so absolute retrieval paths remain current.
+6. Explain bundled hook registration: Codex uses .codex-plugin/plugin.json pointing
+   to hooks/codex.json; Claude Code discovers hooks/hooks.json. No global hook file
+   needs to be written. Do not automatically trust hooks, enable unrelated features
+   or alter host security settings. Direct the user to the host's hook review
+   interface to review the current definition. If a separate configuration change
+   is needed, preview it and obtain authorization under existing project gates.
+7. Run the appropriate adapter with --status only as a readiness explanation:
 
-Do not edit unrelated configuration, install startup hooks, delete instruction
-files or backups, or claim automatic coverage for ChatGPT conversations. This
-workflow configures Codex instruction loading only.
+   ```bash
+   python3 /absolute/plugin/root/enforcement/adapters/codex.py --status
+   ```
+
+   This returns enforcement: unverified. Presence on disk does not establish host
+   support, trust, startup loading or model compliance. Follow HOOKS.md for a real
+   isolated host smoke test; distinguish protocol tests from live host evidence.
+8. Explain explicit verification: the hook supplies an enforcement/verify.py
+   command after guarded work. It executes configured project argument arrays
+   only when explicitly invoked and records actual exit codes. Explain that the
+   default git diff --check proves whitespace cleanliness only. Preview and obtain
+   authorization before creating a project verification configuration.
+
+Do not delete instructions, backups or session records. Do not claim local command
+hooks cover cloud-orchestrated ChatGPT sessions or ordinary ChatGPT conversations.
+Report unsupported/disabled/untrusted hooks as inactive or unverified, never active.
