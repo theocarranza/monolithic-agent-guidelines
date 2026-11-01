@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0
+
+- Add versioned core, shared, Dart and TypeScript references with catalog/find/fetch retrieval.
+- Add synchronous Codex and Claude hook adapters with per-context retrieval receipts, conservative tool gating, and explicit verification evidence.
+- Reload after new prompts, resume and compaction; invalidate checks before and after guarded actions.
+- Replace full persistent startup text with compact summaries and installed retrieval paths. Preserve existing instruction bytes, backups and preview approval safeguards.
+- Correct supplied Task API/concurrency examples and floating-point monoid assumptions; keep project-specific helpers contextual.
+- Hook trust, supported execution mode and live smoke tests are required. Disabled/untrusted hooks, errors/timeouts and unsupported tool paths can bypass guardrails.
+- Preserve the original four principles, Claude plugin identity and existing Cursor rules. Advance both host packages to 1.3.0.
+
 ## 1.2.0
 
 - Add an explicit setup skill and native plugin onboarding action for persistent Codex guidance.

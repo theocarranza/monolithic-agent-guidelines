@@ -133,6 +133,11 @@ while preserving the original guidelines and existing host support. See
 and an explicit setup workflow for persistent guidance through `AGENTS.md`.
 The setup previews its changes and requires authorization before writing.
 
+Version 1.3.0 adds a local reference catalog, on-demand retrieval and host hooks
+for Codex and Claude Code. See [the retrieval and hook guide](HOOKS.md) for
+trust, verification configuration, smoke tests and enforcement limits. A plugin
+installation makes hooks available; it does not prove they are active.
+
 ## Using with Cursor
 
 This repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project in Cursor. See **[CURSOR.md](CURSOR.md)** for setup, using the rule in other projects, and how this relates to Claude Code.

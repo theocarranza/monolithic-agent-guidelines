@@ -58,6 +58,16 @@ class InstallerTests(unittest.TestCase):
         self.assertIn("explicit approval", text)
         self.assertIsNone(result["backup"])
 
+    def test_startup_is_compact_and_reports_unverified_hooks(self):
+        before = self.preview("--codex-home", self.home)
+        self.assertEqual(before["hook_status"], "unverified")
+        self.assertIn("retrieval/query.py", before["diff"])
+        self.apply(before, "--codex-home", self.home)
+        text = (self.home / "AGENTS.md").read_text()
+        self.assertLess(len(text), 2300)
+        self.assertIn("explicit approval", text)
+        self.assertIn("sha256", text)
+
     def test_existing_bytes_and_backup_are_preserved(self):
         target = self.seed()
         original = target.read_bytes()

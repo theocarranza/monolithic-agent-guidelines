@@ -1,9 +1,8 @@
 # Monolithic Agent Guidelines for Codex and ChatGPT
 
-This adaptation adds OpenAI packaging around the original, unchanged
-`skills/karpathy-guidelines/SKILL.md`. Claude Code and Cursor files remain
-available. The new OpenAI package is version 1.2.0; original Claude metadata
-retains version 1.0.0. These additions are not an upstream release.
+This adaptation adds OpenAI packaging around the original principles in
+`skills/karpathy-guidelines/SKILL.md`, extended with reference routing. Claude Code and Cursor files remain
+available. Both host packages are version 1.3.0; Claude retains its original plugin identity. These additions are not an upstream release.
 
 ## Install the local plugin
 
@@ -35,7 +34,7 @@ This project has not been published to the public ChatGPT plugin directory.
 Local installation does not publish it. Register this fork's implementation branch with:
 
 ```bash
-codex plugin marketplace add theocarranza/monolithic-agent-guidelines --ref v1.2.0
+codex plugin marketplace add theocarranza/monolithic-agent-guidelines --ref v1.3.0
 ```
 
 Do not use the upstream URL expecting these additions to be present.
@@ -75,8 +74,7 @@ plugin and a separate copy unless you intentionally want duplicate entries.
 
 ## Set up persistent guidance
 
-Installing the plugin makes its skills available on demand. To put all four
-principles into Codex startup instructions, run the plugin's **Setup** action
+Installing the plugin makes its skills available on demand. To put compact summaries and reference retrieval instructions into Codex startup instructions, run the plugin's **Setup** action
 or explicitly invoke:
 
 ```text
@@ -90,7 +88,7 @@ hidden by an override. Project guidance goes in the selected project's effective
 instruction file. Later project instructions can refine global guidance.
 
 Setup previews the target and diff, waits for authorization, and then writes a
-marked section derived from the original skill. It preserves surrounding bytes,
+marked section with principle summaries and versioned retrieval paths. It preserves surrounding bytes,
 backs up an existing file beside the target, and is safe to repeat. Changed
 previews are refused; malformed sections and symlink instruction files require
 manual resolution. Backups are never automatically removed. Existing project
@@ -174,3 +172,23 @@ Based on upstream commit `2c606141936f1eeef17fa3043a72095b4765b9c2` from
 [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills).
 Original author metadata and MIT declarations are preserved. This adaptation
 does not claim authorship by Andrej Karpathy or endorsement by upstream.
+
+
+## Version 1.3.0 candidate and hook support
+
+This checkout is the unreleased 1.3.0 candidate. Until a v1.3.0 tag is published,
+register `--ref feat/on-demand-guidance` once that branch is pushed, or use a local
+checkout. The versioned installation example above applies after release.
+
+See [HOOKS.md](HOOKS.md) for hook trust, supported hosts and local checks.
+Codex discovers the explicit `./hooks/codex.json` compatibility-manifest entry.
+It does not need a global hook configuration written by setup. Review the exact
+hook definition through the host's hook review interface. Setup reports
+`hook_status: unverified`; only a successful live host smoke test establishes
+that hooks ran in that environment. This plugin cannot verify trust merely from
+its own installed files.
+
+Standalone skill copies keep the four embedded principles but do not include
+the reference engine or hooks. Copy/install the complete plugin to use those
+features. Cloud-orchestrated ChatGPT sessions do not run these local command
+hooks. Ordinary ChatGPT conversations remain outside their scope.
