@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add the shared rule "One behavior, one authoritative implementation" without changing the original four principles.
+- Add examples for interchangeable sources, equivalent entry points, and production/test dependencies, with boundaries for distinct strategies and premature abstractions.
+- Route relevant architecture topics to the detailed reference and link it from shared functional programming, Dart and TypeScript guidance. Keep the existing guidance-only hook lifecycle.
+
 ## 1.4.0
 
 - Refactor README around the Monolithic Dev Harness documentation standard: badges, purpose, documentation map, architecture, installation, quick start, testing and support limits.

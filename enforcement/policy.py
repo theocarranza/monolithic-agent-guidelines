@@ -19,13 +19,14 @@ def requirements(event, catalog):
         languages.add('typescript')
     topic_ids = set()
     for pattern, identifier, language in [
+        (r'\b(adapters?|data[ -]sources?|database|json|local[ -]storage|entry[ -]?points?|test[ -]dependencies|canonical[ -](flow|implementation)|workflows?)\b', 'shared/canonical-behavior', 'all'),
         (r'\b(task|async|concurrency)\b', 'dart/task', 'dart'),
         (r'\b(option|nullable|absence)\b', 'dart/option', 'dart'),
         (r'\b(either|failure|error)\b', 'dart/either', 'dart'),
         (r'\b(effect|clock|random|fake)\b', 'typescript/effects', 'typescript'),
         (r'\b(monoid|aggregation|aggregate)\b', 'typescript/monoids', 'typescript'),
     ]:
-        if language in languages and re.search(pattern, text, re.I):
+        if (language == 'all' or language in languages) and re.search(pattern, text, re.I):
             topic_ids.add(identifier)
     return [catalog.fetch(row['id']) for row in catalog.rows
             if (row['required'] == 'true' and (row['language'] == 'all' or row['language'] in languages))

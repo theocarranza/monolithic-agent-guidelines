@@ -47,6 +47,17 @@ class HostTests(unittest.TestCase):
         self.assertIn('typescript/monoids', result)
         self.assertIn('dart/task', result)
 
+    def test_canonical_behavior_guidance_delivered_from_prompt_then_retry_allowed(self):
+        for host in ['codex', 'claude']:
+            with self.subTest(host=host):
+                self.call(host, 'UserPromptSubmit', prompt='Use database and JSON adapters for the same workflow')
+                first = self.call(host, 'PreToolUse', tool_name='Bash', tool_input={'command': 'pwd'})
+                output = first['hookSpecificOutput']
+                self.assertEqual(output['permissionDecision'], 'deny')
+                self.assertIn('"id": "shared/canonical-behavior"', output['permissionDecisionReason'])
+                self.assertEqual(self.call(host, 'PreToolUse', tool_name='Bash', tool_input={'command': 'pwd'}), {})
+                self.assertEqual(self.call(host, 'Stop'), {})
+
 
     def test_native_reads_and_exact_retrieval_do_not_need_checks(self):
         self.assertEqual(self.call('codex', 'PreToolUse', tool_name='Read', tool_input={'file_path': 'main.dart'}), {})

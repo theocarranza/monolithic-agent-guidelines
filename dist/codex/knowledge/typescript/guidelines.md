@@ -20,6 +20,11 @@ Do not add fp-ts, higher-kinded type machinery or a new result abstraction merel
 to reproduce these examples. Existing project architecture takes precedence.
 
 ## Routing
+Read shared/canonical-behavior for interchangeable sources, equivalent entry
+points and production/test dependencies. Keep one shared use case with the
+project's existing typed contracts and injected capabilities. Do not introduce
+a result library or generic framework solely to reproduce the examples.
+
 Read typescript/effects for external effects and deterministic testing,
 typescript/monoids for structured aggregation, examples/typescript for a small
 portable example and research/functional-patterns for background rationale.

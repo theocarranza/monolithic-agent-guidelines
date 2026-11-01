@@ -2,6 +2,7 @@ id	language	topic	title	path	provenance	read_when	required
 core/principles	all	principles	Four principles	core/principles.md	original	Before substantial planning coding or review	true
 core/retrieval	all	retrieval	Retrieval policy	core/retrieval-policy.md	authored	At startup resume compaction or scope changes	true
 shared/fp	all	functional	Functional programming	shared/functional-programming.md	adapted	When designing pure decisions and effect boundaries	true
+shared/canonical-behavior	all	architecture	One behavior one authoritative implementation	shared/canonical-behavior.md	authored	When designing or reviewing data sources adapters entry points workflows or test dependencies	false
 shared/verification	all	verification	Verification evidence	shared/verification.md	authored	Before implementation and completion	true
 dart/guidelines	dart	language	Strict functional Dart	dart/guidelines.md	authored	When planning editing or reviewing Dart	true
 dart/task	dart	task	Dartz Task async effects	dart/dartz-task.md	adapted	When Task async sequencing or concurrency is involved	false

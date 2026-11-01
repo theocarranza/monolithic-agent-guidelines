@@ -68,6 +68,7 @@ harnesses define any mandatory delivery checks.
 - Read-only catalog, search and document/section retrieval.
 - Guidance delivery before guarded tools, with refresh after resume or compaction.
 - Strict Dart references and portable TypeScript guidance; project rules prevail.
+- One authoritative implementation per behavior, with examples for interchangeable sources, entry points and test dependencies; see [the shared reference](knowledge/shared/canonical-behavior.md).
 - One installer for all detected supported local hosts or a selected subset.
 - Separate, preview-first Codex setup for persistent startup guidance.
 
