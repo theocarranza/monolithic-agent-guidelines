@@ -54,6 +54,15 @@ installation alone does not modify instruction files or prove hooks are active.
    only when explicitly invoked and records actual exit codes. Explain that the
    default git diff --check proves whitespace cleanliness only. Preview and obtain
    authorization before creating a project verification configuration.
+9. The completion hook supplies an explicit --state-dir. Preserve it: hook-only
+   PLUGIN_DATA variables may be absent from shell tools. The verifier must use
+   that exact existing state directory, not an inferred fallback. If the sandbox
+   denies writing the lock/receipt, show the exact directory and request write
+   access only there. For local Codex, the user can restart with
+   `codex --add-dir /exact/directory/from/the/hook`. Do not apply that grant,
+   change sandbox settings, or edit global configuration automatically. User
+   approval applies to the shown directory only. A desktop session needs its
+   own equivalent scoped access; do not claim a separate CLI launch changes it.
 
 Do not delete instructions, backups or session records. Do not claim local command
 hooks cover cloud-orchestrated ChatGPT sessions or ordinary ChatGPT conversations.

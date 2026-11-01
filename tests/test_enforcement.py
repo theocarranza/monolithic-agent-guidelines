@@ -117,6 +117,8 @@ class EnforcementTests(unittest.TestCase):
         config = self.project / '.monolithic-guidelines.json'
         config.write_text(json.dumps({'verification_commands': [[sys.executable, '-c', 'pass']]}))
         with self.assertRaises(ValueError): self.verify.record(self.store, key, self.project)
+        with self.store.transaction(key) as state: state['workspace'] = '/unrelated/workspace'
+        with self.assertRaisesRegex(ValueError, 'hook session workspace'): self.verify.record(self.store, key, self.project)
         with self.store.transaction(key) as state: state['workspace'] = str(self.project)
         code = ("import sys; sys.path.insert(0, " + repr(str(ROOT)) + "); "
                 "from enforcement.session_state import StateStore; "
@@ -142,6 +144,24 @@ class EnforcementTests(unittest.TestCase):
         with self.assertRaises(ValueError): self.verify.commands(self.project)
         subprocess.run(['git', 'init', '-q', str(self.project)], check=True)
         self.assertEqual(self.verify.commands(self.project), [['git', 'diff', '--check']])
+
+    def test_verification_does_not_recreate_state_removed_while_waiting_for_lock(self):
+        from unittest.mock import patch
+        key = self.session_state.identity(self.event, 'codex')
+        with self.store.transaction(key):
+            pass
+        path = self.store.directory / (key + '.json')
+        moved = self.store.directory / 'moved-record.json'
+        original_lock = self.session_state.fcntl.flock
+        def acquire_then_move(descriptor, operation):
+            original_lock(descriptor, operation)
+            path.rename(moved)
+        with patch('enforcement.session_state.fcntl.flock', side_effect=acquire_then_move):
+            with self.assertRaisesRegex(ValueError, 'disappeared'):
+                with self.store.transaction(key, require_existing=True):
+                    self.fail('Missing state must not be yielded')
+        self.assertFalse(path.exists())
+        self.assertTrue(moved.is_file())
 
 
 if __name__ == '__main__': unittest.main()
