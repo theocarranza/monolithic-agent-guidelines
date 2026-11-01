@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Explicitly run project checks and record actual, generation-bound evidence."""
 import argparse
+import errno
+import shlex
 import hashlib
 import json
 from pathlib import Path
@@ -51,13 +53,13 @@ def run_checks(root, checks, timeout=300):
 
 
 def record(store, key, root):
-    checks = commands(root)
-    with store.transaction(key) as state:
+    with store.transaction(key, require_existing=True) as state:
         if state['workspace'] != str(root):
             raise ValueError('Verification requires the hook session workspace')
         before = (state['generation'], state['epoch'])
+    checks = commands(root)
     results = run_checks(root, checks)
-    with store.transaction(key) as state:
+    with store.transaction(key, require_existing=True) as state:
         if before != (state['generation'], state['epoch']) or config_digest(commands(root)) != config_digest(checks):
             raise ValueError('Task, checks or files changed during verification; run again')
         state['verification'] = {'generation': before[0], 'epoch': before[1],
@@ -70,13 +72,20 @@ def main(argv=None):
     parser.add_argument('--key', required=True)
     parser.add_argument('--cwd', required=True, type=Path)
     parser.add_argument('--host', choices=['codex', 'claude'], required=True)
+    parser.add_argument('--state-dir', type=Path, help='Exact host-specific state directory supplied by the hook')
     args = parser.parse_args(argv)
+    directory = (args.state_dir or state_directory(args.host)).absolute()
     try:
-        results = record(StateStore(state_directory(args.host)), args.key, args.cwd.resolve())
+        results = record(StateStore(directory), args.key, args.cwd.resolve())
         print(json.dumps({'results': results}, indent=2))
         return 0 if all(r['exit_code'] == 0 for r in results) else 1
     except (OSError, ValueError) as error:
-        print(json.dumps({'error': str(error)}), file=sys.stderr)
+        detail = {'error': str(error), 'state_directory': str(directory)}
+        if isinstance(error, OSError) and error.errno in (errno.EROFS, errno.EACCES, errno.EPERM):
+            detail['access_required'] = ('Request write access only to this state directory. For a local Codex session, '
+                                         'restart with: ' + shlex.join(['codex', '--add-dir', str(directory)]) +
+                                         '. Do not disable the sandbox or alter filesystem permissions.')
+        print(json.dumps(detail), file=sys.stderr)
         return 2
 
 

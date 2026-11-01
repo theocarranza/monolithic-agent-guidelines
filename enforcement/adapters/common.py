@@ -58,9 +58,9 @@ def refresh(documents, state):
     return missing
 
 
-def verifier_command(host, key, cwd):
+def verifier_command(host, key, cwd, directory):
     return shlex.join(['python3', str(ROOT / 'enforcement/verify.py'), '--key', key,
-                       '--cwd', cwd, '--host', host])
+                       '--cwd', cwd, '--host', host, '--state-dir', str(directory.resolve())])
 
 
 def dispatch(event, host, store):
@@ -121,7 +121,12 @@ def dispatch(event, host, store):
                 return {'decision': 'block', 'reason': 'Reload guidance before completing.\n\n' + render(missing)}
             if not success:
                 return {'decision': 'block', 'reason': detail + 'Verification evidence is missing, failed or stale. Run explicitly:\n'
-                        + verifier_command(host, key, cwd) + '\nReport what the configured checks prove. Do not claim more.'}
+                        + verifier_command(host, key, cwd, store.directory)
+                        + '\nThe verifier needs write access only to ' + str(store.directory.resolve())
+                        + '. If the sandbox denies access, request that narrow grant or restart local Codex with '
+                        + shlex.join(['codex', '--add-dir', str(store.directory.resolve())])
+                        + '. Never broaden sandbox permissions automatically.'
+                        + '\nReport what the configured checks prove. Do not claim more.'}
         return {}
 
 

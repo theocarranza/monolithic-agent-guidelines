@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.2
+
+- Pass the exact hook state directory to the verifier so shell environment differences do not select an empty unrelated record.
+- Refuse missing session records before creating state; retain workspace, generation and check-configuration validation.
+- Report denied state writes with the exact path and narrowly scoped access instructions. Never grant permissions or edit host sandbox configuration automatically.
+- Test verification with a sanitized environment and injected read-only/permission failures. An optional unprivileged process test is skipped where UID/GID mapping prevents it. Native Codex sandbox execution remains unverified here because namespace creation is prohibited.
+
 ## 1.3.1
 
 - Fix hook discovery on Codex 0.166.0 by routing its marketplace to a generated legacy-format package without a portable root manifest.

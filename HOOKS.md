@@ -80,7 +80,7 @@ manually. The state is local and writable, not tamper-proof audit evidence.
 The hook supplies the exact command with a session key:
 
 ```bash
-python3 /absolute/plugin/enforcement/verify.py --key SESSION_KEY --cwd /project --host codex
+python3 /absolute/plugin/enforcement/verify.py --key SESSION_KEY --cwd /project --host codex --state-dir /exact/host/state/directory
 ```
 
 It runs only when invoked explicitly, never in a lifecycle hook. Project
@@ -155,3 +155,32 @@ plugin hooks; the legacy distribution in v1.3.1 yields all six, enabled and
 untrusted, without registry errors. Run tests/native_codex_discovery.py with the
 absolute Codex binary path to repeat this check. Trust and live execution remain
 separate user-machine checks; discovery does not prove the hook callbacks ran.
+
+
+## Shared state and sandbox access (1.3.2)
+
+The generated verifier command carries --state-dir with the exact host-specific
+StateStore directory. This overrides hook-only PLUGIN_DATA/CLAUDE_PLUGIN_DATA and
+shell XDG_STATE_HOME differences. Preserve the entire current command, including
+its key, workspace and state directory. The verifier refuses missing records
+rather than creating an empty session in a guessed directory.
+
+The verifier writes a lock and evidence under that directory. A workspace-write
+sandbox may expose it read-only. Permission failures print the exact directory
+and a narrow access instruction. For a local Codex session, the user may approve
+that specific directory by starting `codex --add-dir /exact/state/directory`.
+This is a launch permission, not a plugin-managed setting. It does not change an
+already running desktop session. Setup must show the path and obtain permission;
+neither setup nor the hooks automatically grant access, disable the sandbox,
+change filesystem permissions or write global configuration. Grant only the
+shown state directory, not the whole home or plugin cache.
+
+Verification: subprocess lifecycle tests start with hook-only PLUGIN_DATA, remove
+it for the verifier, and still satisfy Stop using the explicit directory. Injected EROFS/EACCES/EPERM lock failures leave Stop blocked; once access is
+available, real configured checks run and Stop accepts the evidence. An optional
+unprivileged Linux subprocess test exercises file permissions where mapped
+UID/GID support exists. It is skipped in the development host, which maps only
+root. These are not exact Codex sandbox tests. Native
+bubblewrap execution in the development host is unavailable (namespace creation
+is prohibited); repeat the supported-client test after approving its scoped
+write access. No live user permissions are changed by these tests.

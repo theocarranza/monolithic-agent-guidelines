@@ -35,7 +35,7 @@ This project has not been published to the public ChatGPT plugin directory.
 Local installation does not publish it. Register this fork's implementation branch with:
 
 ```bash
-codex plugin marketplace add theocarranza/monolithic-agent-guidelines --ref v1.3.1
+codex plugin marketplace add theocarranza/monolithic-agent-guidelines --ref v1.3.2
 ```
 
 Do not use the upstream URL expecting these additions to be present.
@@ -215,3 +215,15 @@ It must discover six enabled, untrusted hooks with no errors. It does not trust
 hooks or certify live tool interception. After upgrading to v1.3.1, restart Codex,
 open /hooks, review/trust this package's hooks, then repeat the pwd smoke test.
 Rerun setup to refresh any absolute paths in your existing global guidance.
+
+
+## Verifier state access (1.3.2)
+
+Use the full verifier command emitted by the current hook, including --state-dir.
+The hook's environment can differ from shell tools. The explicit directory keeps
+both processes on the same existing session record. If sandbox access is denied,
+review the directory printed by the verifier and grant only that directory.
+For local CLI use, restart with `codex --add-dir /exact/state/directory` and
+repeat the test in the new session using its new hook-supplied command. This
+does not modify an existing desktop session; approve equivalent scoped access in
+that session when supported. Do not use full-access mode to test this plugin.
