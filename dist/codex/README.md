@@ -1,6 +1,6 @@
 # Monolithic Agent Guidelines
 
-[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](https://github.com/theocarranza/monolithic-agent-guidelines/releases/tag/v1.4.0)
+[![Version](https://img.shields.io/badge/version-1.4.1-blue.svg)](https://github.com/theocarranza/monolithic-agent-guidelines/releases/tag/v1.4.1)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![Codex](https://img.shields.io/badge/Codex-guidance_hooks-black.svg)](CODEX.md)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-guidance_hooks-blueviolet.svg)](INSTALL.md)
@@ -94,13 +94,13 @@ harnesses define any mandatory delivery checks.
 All detected supported local hosts:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.0/install.sh | bash -s -- --host all
+curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.1/install.sh | bash -s -- --host all
 ```
 
 Only selected hosts:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.0/install.sh | bash -s -- --host codex,cursor
+curl -fsSL https://raw.githubusercontent.com/theocarranza/monolithic-agent-guidelines/v1.4.1/install.sh | bash -s -- --host codex,cursor
 ```
 
 From a repository checkout, inspect the planned targets first:

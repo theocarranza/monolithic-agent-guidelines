@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # User-scoped installer. Native hook trust and persistent guidance are separate.
 set -euo pipefail
-VERSION="v1.4.0"
+VERSION="v1.4.1"
 REPOSITORY="https://github.com/theocarranza/monolithic-agent-guidelines.git"
 PYTHON_BIN="${PYTHON:-python3}"
 command -v "$PYTHON_BIN" >/dev/null || { echo 'Python 3.9+ is required.' >&2; exit 1; }

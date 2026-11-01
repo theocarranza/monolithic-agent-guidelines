@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.4.1
 
 - Add the shared rule "One behavior, one authoritative implementation" without changing the original four principles.
 - Add examples for interchangeable sources, equivalent entry points, and production/test dependencies, with boundaries for distinct strategies and premature abstractions.
